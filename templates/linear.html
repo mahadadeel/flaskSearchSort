@@ -6,6 +6,30 @@
   </head>
   <body class="bg-primary">
       <h2>Linear Search</h2>
+
+      <form>
+        <div class="form-group">
+          <label>Enter List Here:</label>
+          <input type="text" class="form-control" id="the_list" name="the_list" placeholder="E.g. 1,23,4,109,16">
+          <label>Enter Criteria Here:</label>
+          <input type="text" class="form-control" id="the_criteria" name="the_criteria" placeholder="E.g. 23">
+        </div>
+        <button type="submit" class="btn btn-light" onclick="window.location.href" formmethod="post">Search it</button>
+      </form>
+
+      {% if _error %}
+
+      <h3>Please enter a suitable List and Criteria</h3>
+
+      {% endif %}
+
+      {% if _position %}
+
+      <h3>The position of the number is:</h3>
+      <h5 id="outputNumber">{{_position}}</h5>
+
+      {% endif %}
+
       <button type="button" class="btn btn-light" onclick="window.location.href='/home'">Return Home</button>
 
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

@@ -13,9 +13,14 @@
           <input type="text" class="form-control" id="the_list" name="the_list" placeholder="E.g. 1,23,4,109,16">
         </div>
         <button type="submit" class="btn btn-light" onclick="window.location.href" formmethod="post">Sort it</button>
-
       </form>
 
+      {% if _error %}
+
+      <h3>Please enter a suitable List</h3>
+
+      {% endif %}
+      
       {% if _list %}
 
       <h3>The output list is:</h3>
