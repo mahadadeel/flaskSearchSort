@@ -76,100 +76,181 @@ def home():
 
 @app.route('/bubble', methods=["GET","POST"])
 def bubble():
-    if request.method == "GET":
-        return render_template('bubble.html')
-    elif request.method == "POST" and "the_list" in request.form:
-        _list = request.form["the_list"]
+    try:
+        if request.method == "GET":
+            return render_template('bubble.html')
+        elif request.method == "POST":
+            if "the_list" in request.form:
+                _textUpload = request.form["the_list"]
+                if _textUpload:
+                    _list = formatList(_textUpload)
+                    _startTime = time_ns()
+                    _list = bubbleSort(_list)
+                    _endTime = time_ns()
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _error = True)
+            elif "the_file" in request.files:
+                _fileUpload = request.files["the_file"]
+                if _fileUpload:
+                    _readData = _fileUpload.stream.read().decode("utf-8")
+                    _list = formatList(_readData)
+                    _startTime = time_ns()
+                    _list = bubbleSort(_list)
+                    _endTime = time_ns()
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _fileError = True)
 
-        if _list:
-            _list = formatList(_list)
-            _startTime = time_ns()
-            _list = bubbleSort(_list)
-            _endTime = time_ns()
-            _timeTaken = _endTime - _startTime
-            if _timeTaken < 1000000000:
-                _timeDisplay = str(_timeTaken)+" nanoseconds"
-            else:
-                _timeDisplay = str(_timeTaken/1000000000)+" seconds"
-        else:
-            return render_template("bubble.html", _error = True)
-
-    return render_template("bubble.html", _list = _list, _time = _timeDisplay)
+        return render_template("bubble.html", _list = _list, _time = _timeDisplay)
+    except:
+        return render_template("error.html")
 
 @app.route('/merge', methods=["GET","POST"])
 def merge():
-    if request.method == "GET":
-        return render_template('merge.html')
-    elif request.method == "POST" and "the_list" in request.form:
-        _list = request.form["the_list"]
+    try:
+        if request.method == "GET":
+            return render_template('merge.html')
+        elif request.method == "POST":
+            if "the_list" in request.form:
+                _textUpload = request.form["the_list"]
+                if _textUpload:
+                    _list = formatList(_textUpload)
+                    _startTime = time_ns()
+                    _list = mergeSort(_list)
+                    _endTime = time_ns()
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _error = True)
+            elif "the_file" in request.files:
+                _fileUpload = request.files["the_file"]
+                if _fileUpload:
+                    _readData = _fileUpload.stream.read().decode("utf-8")
+                    _list = formatList(_readData)
+                    _startTime = time_ns()
+                    _list = mergeSort(_list)
+                    _endTime = time_ns()
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _fileError = True)
 
-        if _list:
-            _list = formatList(_list)
-            _startTime = time_ns()
-            _list = mergeSort(_list)
-            _endTime = time_ns()
-            _timeTaken = _endTime - _startTime
-            if _timeTaken < 1000000000:
-                _timeDisplay = str(_timeTaken)+" nanoseconds"
-            else:
-                _timeDisplay = str(_timeTaken/1000000000)+" seconds"
-        else:
-            return render_template("merge.html", _error = True)
-
-    return render_template("merge.html", _list = _list, _time = _timeDisplay)
+        return render_template("merge.html", _list = _list, _time = _timeDisplay)
+    except:
+        return render_template("error.html")
 
 @app.route('/linear', methods=["GET","POST"])
 def linear():
-    if request.method == "GET":
-        return render_template('linear.html')
-    elif request.method == "POST" and "the_list" in request.form and "the_criteria" in request.form:
-        _list = request.form["the_list"]
-        _criteria = request.form["the_criteria"]
+    try:
+        if request.method == "GET":
+            return render_template('linear.html')
+        elif request.method == "POST":
+            if "the_list" in request.form and "the_criteria" in request.form:
+                _textUpload = request.form["the_list"]
+                _criteria = request.form["the_criteria"]
+                if _textUpload and _criteria:
+                    _list = formatList(_textUpload)
+                    _criteria = int(_criteria)
+                    _startTime = time_ns()
+                    _position = linearSearch(_list, _criteria)
+                    _endTime = time_ns()
+                    if _position == None:
+                        _position = "This item is not in the list"
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("linear.html", _error = True)
+            if "the_file" in request.files and "the_criteria" in request.form:
+                _fileUpload = request.files["the_file"]
+                _criteria = request.form["the_criteria"]
+                if _fileUpload and _criteria:
+                    _readData = _fileUpload.stream.read().decode("utf-8")
+                    _list = formatList(_readData)
+                    _criteria = int(_criteria)
+                    _startTime = time_ns()
+                    _position = linearSearch(_list, _criteria)
+                    _endTime = time_ns()
+                    if _position == None:
+                        _position = "This item is not in the list"
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _fileError = True)
 
-        if _list and _criteria:
-            _list = formatList(_list)
-            _criteria = int(_criteria)
-            _startTime = time_ns()
-            _position = linearSearch(_list, _criteria)
-            _endTime = time_ns()
-            if _position == None:
-                _position = "This item is not in the list"
-            _timeTaken = _endTime - _startTime
-            if _timeTaken < 1000000000:
-                _timeDisplay = str(_timeTaken)+" nanoseconds"
-            else:
-                _timeDisplay = str(_timeTaken/1000000000)+" seconds"
-        else:
-            return render_template("linear.html", _error = True)
-
-    return render_template("linear.html", _position = _position, _time = _timeDisplay)
+        return render_template("linear.html", _position = _position, _time = _timeDisplay)
+    except:
+        return render_template("error.html")
 
 @app.route('/binary', methods=["GET","POST"])
 def binary():
-    if request.method == "GET":
-        return render_template('binary.html')
-    elif request.method == "POST" and "the_list" in request.form and "the_criteria" in request.form:
-        _list = request.form["the_list"]
-        _criteria = request.form["the_criteria"]
+    try:
+        if request.method == "GET":
+            return render_template('binary.html')
+        elif request.method == "POST":
+            if "the_list" in request.form and "the_criteria" in request.form:
+                _textUpload = request.form["the_list"]
+                _criteria = request.form["the_criteria"]
+                if _textUpload and _criteria:
+                    _list = formatList(_textUpload)
+                    _list = mergeSort(_list)
+                    _criteria = int(_criteria)
+                    _startTime = time_ns()
+                    _position = binarySearch(_list, _criteria, 0, len(_list))
+                    _endTime = time_ns()
+                    if _position == None:
+                        _position = "This item is not in the list"
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("binary.html", _error = True)
+            if "the_file" in request.files and "the_criteria" in request.form:
+                _fileUpload = request.files["the_file"]
+                _criteria = request.form["the_criteria"]
+                if _fileUpload and _criteria:
+                    _readData = _fileUpload.stream.read().decode("utf-8")
+                    _list = formatList(_readData)
+                    _list = mergeSort(_list)
+                    _criteria = int(_criteria)
+                    _startTime = time_ns()
+                    _position = binarySearch(_list, _criteria, 0, len(_list))
+                    _endTime = time_ns()
+                    if _position == None:
+                        _position = "This item is not in the list"
+                    _timeTaken = _endTime - _startTime
+                    if _timeTaken < 1000000000:
+                        _timeDisplay = str(_timeTaken)+" nanoseconds"
+                    else:
+                        _timeDisplay = str(_timeTaken/1000000000)+" seconds"
+                else:
+                    return render_template("bubble.html", _fileError = True)
 
-        if _list and _criteria:
-            _list = formatList(_list)
-            _startTime = time_ns()
-            _list = mergeSort(_list)
-            _endTime = time_ns()
-            _criteria = int(_criteria)
-            _position = binarySearch(_list, _criteria, 0, len(_list))
-            if _position == None:
-                _position = "This item is not in the list"
-            _timeTaken = _endTime - _startTime
-            if _timeTaken < 1000000000:
-                _timeDisplay = str(_timeTaken)+" nanoseconds"
-            else:
-                _timeDisplay = str(_timeTaken/1000000000)+" seconds"
-        else:
-            return render_template("binary.html", _error = True)
-
-    return render_template("binary.html", _position = _position, _list = _list, _time = _timeDisplay)
+        return render_template("binary.html", _position = _position, _list = _list, _time = _timeDisplay)
+    except:
+        return render_template("error.html")
 
 if __name__ == '__main__':
   app.run()
