@@ -9,7 +9,7 @@
 
       <form>
         <div class="form-group">
-          <label>Enter List Here (ENSURE YOUR LIST IS SORTED):</label>
+          <label>Enter List Here:</label>
           <input type="text" class="form-control" id="the_list" name="the_list" placeholder="E.g. 1,4,16,23,109">
           <label>Enter Criteria Here:</label>
           <input type="text" class="form-control" id="the_criteria" name="the_criteria" placeholder="E.g. 23">
@@ -23,10 +23,13 @@
 
       {% endif %}
 
-      {% if _position %}
+      {% if _position%}
 
+      <h3>The sorted list is:</h3>
+      <h5 id="outputNumber">{{_list}}</h5>
       <h3>The position of the number is:</h3>
       <h5 id="outputNumber">{{_position}}</h5>
+      <h6 id="time">Time taken: {{_time}}</h6>
 
       {% endif %}
 
